@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 import './student.css';
 
 const StudentLayout: React.FC = () => {
@@ -14,6 +15,7 @@ const StudentLayout: React.FC = () => {
     <div className="student-layout">
       <nav className="student-nav">
         <div className="brand">
+          <img src={logo} alt="DevBeeZ Logo" className="brand-logo" />
           <span style={{color: 'white'}}>Dev</span>BeeZ <span style={{fontSize: '1rem', color: '#a0a5b5'}}>StudentPortal</span>
         </div>
         
@@ -21,7 +23,6 @@ const StudentLayout: React.FC = () => {
           <NavLink to="/student" end className={({isActive}) => isActive ? "student-nav-link active" : "student-nav-link"}>Dashboard</NavLink>
           <NavLink to="/student/quiz" className={({isActive}) => isActive ? "student-nav-link active" : "student-nav-link"}>Quiz Arenas</NavLink>
           <NavLink to="/student/code" className={({isActive}) => isActive ? "student-nav-link active" : "student-nav-link"}>Code Arenas</NavLink>
-          <NavLink to="/student/documents" className={({isActive}) => isActive ? "student-nav-link active" : "student-nav-link"}>Documents</NavLink>
         </div>
         
         <button className="student-profile-btn" onClick={handleLogout}>

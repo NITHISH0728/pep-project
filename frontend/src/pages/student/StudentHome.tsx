@@ -22,7 +22,10 @@ const StudentHome: React.FC = () => {
 
   return (
     <div style={{ animation: "fadeIn 0.6s ease-out", maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 style={{fontSize: '24px', fontWeight: 700, color: '#1E293B', marginBottom: '24px'}}>Student Dashboard</h1>
+      <div style={{ position: 'relative', marginBottom: '40px', display: 'inline-block' }}>
+        <h1 style={{fontSize: '46px', fontWeight: 800, color: '#0F172A', margin: '0 0 8px 0', letterSpacing: '-1.5px'}}>Student Dashboard</h1>
+        <div style={{ height: '6px', width: '100%', background: 'linear-gradient(90deg, #FFC107 0%, rgba(255, 193, 7, 0) 100%)', borderRadius: '4px' }}></div>
+      </div>
 
       <div style={{ marginBottom: '16px' }}>
          <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#0F172A', marginBottom: '16px' }}>Students Details</h2>

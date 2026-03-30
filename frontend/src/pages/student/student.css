@@ -42,7 +42,9 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--student-bg);
+    background-color: #FAFAFA;
+    position: relative;
+    overflow: hidden;
   }
   
   /* Navigation Bar */
@@ -60,11 +62,20 @@
   }
   
   .student-nav .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     font-size: 20px;
     font-weight: 700;
     color: #FFFFFF;
     letter-spacing: -0.5px;
     text-decoration: none;
+  }
+  
+  .brand-logo {
+    height: 32px;
+    width: auto;
+    display: block;
   }
   
   .student-nav-links {
@@ -89,25 +100,25 @@
   }
   
   .student-nav-link.active {
-    color: var(--student-nav-text-hover);
-    background-color: rgba(255, 255, 255, 0.1);
+    color: #0F172A;
+    background-color: #FFC107;
+    font-weight: 700;
   }
   
   .student-profile-btn {
     background: none;
-    border: 1px solid #334155;
-    color: var(--student-nav-text);
+    border: none;
+    color: #F87171;
     padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
   }
   
   .student-profile-btn:hover {
-    border-color: #EF4444;
     color: #EF4444;
+    text-decoration: underline;
   }
   
   /* Page Content */
@@ -119,6 +130,8 @@
     width: 100%;
     box-sizing: border-box;
     animation: fadeIn 0.4s ease-out;
+    position: relative;
+    z-index: 1;
   }
   
   /* Dashboard Cards */
