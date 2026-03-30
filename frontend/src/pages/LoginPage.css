@@ -37,7 +37,9 @@
     height: 100%;
     max-width: 1440px;
     margin: 0 auto;
+    margin-left:50px;
 }
+
 
 /* Left Content - Form Area */
 .left-content {
@@ -136,6 +138,7 @@
     max-width: 500px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     color: #121212;
+    margin-left:150px;
 }
 
 .bee-icon {
