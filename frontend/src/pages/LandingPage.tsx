@@ -102,48 +102,49 @@ const Header = () => (
 
 const LeftContent = () => {
     const navigate = useNavigate();
-    
+
     return (
-    <div className="left-section">
-        <Header />
-        <div className="main-content-wrapper">
-            <div className="heading-wrapper animate-fade-in">
-                <h2 className="heading-line-1">Ace Your Next</h2>
-                <h1 className="heading-line-2">
-                    FullStack<br />
-                    Interview
-                </h1>
-            </div>
+        <div className="left-section">
+            <Header />
+            <div className="main-content-wrapper">
+                <div className="heading-wrapper animate-fade-in">
+                    <h2 className="heading-line-1">Ace Your Next</h2>
+                    <h1 className="heading-line-2">
+                        FullStack<br />
+                        Interview
+                    </h1>
+                </div>
 
-            <h3 className="subheading animate-fade-in" style={{ animationDelay: '0.1s' }}>
-                Practicing with The Hive
-            </h3>
+                <h3 className="subheading animate-fade-in" style={{ animationDelay: '0.1s' }}>
+                    Practicing with The Hive
+                </h3>
 
-            <p className="description animate-fade-in" style={{ animationDelay: '0.2s' }}>
-                Get real-time feedback, detailed performance<br />
-                metrics, and build confidence with industry<br />
-                experts.
-            </p>
+                <p className="description animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                    Get real-time feedback, detailed performance<br />
+                    metrics, and build confidence with industry<br />
+                    experts.
+                </p>
 
-            <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
-                <button className="cta-button" onClick={() => navigate('/login')}>
-                    <div className="cta-icon-plus">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                    </div>
-                    <span className="cta-text">Get Started</span>
-                    <div className="cta-icon-arrow">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="9 18 15 12 9 6"></polyline>
-                        </svg>
-                    </div>
-                </button>
+                <div className="animate-fade-in" style={{ animationDelay: '0.3s' }}>
+                    <button className="cta-button" onClick={() => navigate('/login')}>
+                        <div className="cta-icon-plus">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </div>
+                        <span className="cta-text">Get Started</span>
+                        <div className="cta-icon-arrow">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-)};
+    )
+};
 
 const RightVisual = () => (
     <div className="right-section">

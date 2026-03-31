@@ -1,4 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import * as mammoth from 'mammoth';
+
+const parseTextToQuestions = (text) => {
+    // Basic regex-based parser
+    const questionBlocks = text.split(/(?=\n*\d+\.\s+)/).filter(b => b.trim() !== '');
+    const newQuestions = [];
+
+    questionBlocks.forEach(block => {
+        let question_text = '';
+        let option_a = '';
+        let option_b = '';
+        let option_c = '';
+        let option_d = '';
+        let correct_option = 'A';
+
+        const lines = block.split('\n').map(l => l.trim()).filter(l => l);
+        
+        lines.forEach(line => {
+             if (/^\d+\.\s*(.+)/.test(line) && !question_text) {
+                 question_text = line.replace(/^\d+\.\s*/, '').trim();
+             } else if (/^[A][)\.]\s*(.+)/i.test(line)) {
+                 option_a = line.replace(/^[A][)\.]\s*/i, '').trim();
+             } else if (/^[B][)\.]\s*(.+)/i.test(line)) {
+                 option_b = line.replace(/^[B][)\.]\s*/i, '').trim();
+             } else if (/^[C][)\.]\s*(.+)/i.test(line)) {
+                 option_c = line.replace(/^[C][)\.]\s*/i, '').trim();
+             } else if (/^[D][)\.]\s*(.+)/i.test(line)) {
+                 option_d = line.replace(/^[D][)\.]\s*/i, '').trim();
+             } else if (/^Ans(wer)?:\s*([A-D])/i.test(line)) {
+                 correct_option = line.match(/^Ans(wer)?:\s*([A-D])/i)[2].toUpperCase();
+             } else if (question_text && !option_a && !/^[ABCD][)\.]\s*/i.test(line) && !/^Ans(wer)?/i.test(line)) {
+                 question_text += " " + line;
+             }
+        });
+
+        if (question_text && option_a && option_b && option_c && option_d) {
+            newQuestions.push({
+                question_text,
+                option_a,
+                option_b,
+                option_c,
+                option_d,
+                correct_option,
+                marks: 1
+            });
+        }
+    });
+
+    return newQuestions;
+};
 
 const emptyQuizQuestion = () => ({
     question_text: '',
@@ -31,6 +81,8 @@ const CreateTest = () => {
     const [problems, setProblems] = useState([emptyCodeProblem()]);
     const [alert, setAlert] = useState(null);
     const [submitting, setSubmitting] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+    const fileInputRef = useRef(null);
 
     // Quiz handlers
     const addQuestion = () => {
@@ -80,6 +132,69 @@ const CreateTest = () => {
         const updated = [...problems];
         updated[problemIndex].test_cases[tcIndex][field] = value;
         setProblems(updated);
+    };
+
+    // File upload handlers
+    const handleFileUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        await processFile(file);
+    };
+
+    const processFile = async (file) => {
+        setAlert(null);
+        try {
+            let text = '';
+            if (file.name.endsWith('.docx')) {
+                const arrayBuffer = await file.arrayBuffer();
+                const result = await mammoth.extractRawText({ arrayBuffer });
+                text = result.value;
+            } else if (file.name.endsWith('.txt')) {
+                text = await file.text();
+            } else {
+                setAlert({ type: 'error', message: 'Unsupported file format. Please upload .docx or .txt' });
+                return;
+            }
+
+            const parsedQuestions = parseTextToQuestions(text);
+            if (parsedQuestions.length > 0) {
+                if (questions.length === 1 && questions[0].question_text === '') {
+                    setQuestions(parsedQuestions.slice(0, 20));
+                } else {
+                    const combined = [...questions, ...parsedQuestions];
+                    setQuestions(combined.slice(0, 20));
+                }
+                setAlert({ type: 'success', message: `Successfully extracted ${parsedQuestions.length} questions.` });
+            } else {
+                setAlert({ type: 'error', message: 'Could not find any standard structure questions. Format must be 1. Q, A) opt, B) opt, Answer: A' });
+            }
+        } catch (err) {
+            console.error("Parse Error:", err);
+            setAlert({ type: 'error', message: 'Error processing document.' });
+        }
+        
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const file = e.dataTransfer.files?.[0];
+        if (file) {
+            processFile(file);
+        }
     };
 
     const handleSubmit = async () => {
@@ -201,7 +316,38 @@ const CreateTest = () => {
             {/* Quiz Questions */}
             {testType === 'quiz' && (
                 <div>
-                    <h3 className="admin-section-title">Questions ({questions.length}/20)</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                        <h3 className="admin-section-title" style={{ margin: 0 }}>Questions ({questions.length}/20)</h3>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                             <input type="file" accept=".txt, .docx" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileUpload} />
+                             <button className="admin-btn admin-btn-secondary admin-btn-sm" onClick={() => fileInputRef.current?.click()} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', fontSize: '13px' }}>
+                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                 Upload Data
+                             </button>
+                        </div>
+                    </div>
+
+                    <div 
+                        className={`admin-upload-zone ${isDragging ? 'dragging' : ''}`}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        style={{
+                            border: `2px dashed ${isDragging ? '#EAB308' : '#CBD5E1'}`,
+                            borderRadius: '8px',
+                            padding: '32px',
+                            textAlign: 'center',
+                            marginBottom: '24px',
+                            backgroundColor: isDragging ? '#FEFCE8' : '#F8FAFC',
+                            transition: 'all 0.2s',
+                            cursor: 'pointer'
+                        }}
+                        onClick={() => fileInputRef.current?.click()}
+                    >
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={isDragging ? '#EAB308' : '#94A3B8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '8px' }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <h4 style={{ margin: '0 0 4px', color: '#1E293B', fontSize: '14px', fontWeight: '500' }}>Drag & Drop to Upload Test Questions</h4>
+                        <p style={{ margin: 0, color: '#64748B', fontSize: '13px' }}>Supports .docx and .txt formats. Document format: 1. Q / A) B) C) D) / Ans: A</p>
+                    </div>
                     {questions.map((q, qi) => (
                         <div key={qi} className="admin-question-block">
                             <div className="admin-question-header">
