@@ -21,7 +21,7 @@ const ManageStudents = () => {
             const params = new URLSearchParams();
             if (search) params.append('search', search);
             if (department) params.append('department', department);
-            if (classSection) params.append('class_section', classSection);
+            if (classSection) params.append('classSection', classSection);
 
             const res = await fetch(`http://localhost:5000/api/students?${params.toString()}`);
             const data = await res.json();
@@ -114,15 +114,15 @@ const ManageStudents = () => {
                             <tr key={s.id}>
                                 <td>{i + 1}</td>
                                 <td style={{ fontWeight: 600 }}>{s.name || '-'}</td>
-                                <td>{s.email}</td>
-                                <td>{s.roll_no || '-'}</td>
-                                <td>{s.reg_no || '-'}</td>
+                                <td>{s.emailId || s.email}</td>
+                                <td>{s.rollNumber || '-'}</td>
+                                <td>{s.registrationNumber || '-'}</td>
                                 <td>
                                     {s.department ? (
                                         <span className="admin-badge admin-badge-quiz">{s.department}</span>
                                     ) : '-'}
                                 </td>
-                                <td>{s.class_section || '-'}</td>
+                                <td>{s.classSection || '-'}</td>
                                 <td>
                                     <button
                                         className="admin-btn admin-btn-danger admin-btn-sm"

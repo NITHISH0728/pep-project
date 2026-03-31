@@ -2,21 +2,103 @@
   "users": [
     {
       "id": 1,
-      "email": "admin@gmail.com",
-      "password": "123",
+      "registrationNumber": "admin",
+      "rollNumber": "1234",
       "role": "admin",
-      "name": "Admin"
+      "name": "Admin",
+      "department": "HQ",
+      "classSection": "A",
+      "emailId": "admin@gmail.com"
     },
     {
-      "id": 2,
-      "email": "student@gmail.com",
-      "password": "123",
-      "role": "student",
-      "name": "Demo Student",
+      "id": 5,
+      "name": "Diana Evans",
+      "rollNumber": "R1004",
+      "department": "EEE",
+      "registrationNumber": "REG2004",
+      "classSection": "A",
+      "emailId": "diana@gmail.com",
+      "role": "student"
+    },
+    {
+      "id": 6,
+      "name": "Ethan White",
+      "rollNumber": "R1005",
+      "department": "IT",
+      "registrationNumber": "REG2005",
+      "classSection": "B",
+      "emailId": "ethan@gmail.com",
+      "role": "student"
+    },
+    {
+      "id": 7,
+      "name": "Fiona Green",
+      "rollNumber": "R1006",
       "department": "CSE",
-      "class_section": "A",
-      "roll_no": "24CS360",
-      "reg_no": "3123241040"
+      "registrationNumber": "REG2006",
+      "classSection": "C",
+      "emailId": "fiona@gmail.com",
+      "role": "student"
+    },
+    {
+      "id": 8,
+      "name": "George Hall",
+      "rollNumber": "R1007",
+      "department": "ECE",
+      "registrationNumber": "REG2007",
+      "classSection": "A",
+      "emailId": "george@gmail.com",
+      "role": "student"
+    },
+    {
+      "id": 9,
+      "name": "Hannah King",
+      "rollNumber": "R1008",
+      "department": "EEE",
+      "registrationNumber": "REG2008",
+      "classSection": "B",
+      "emailId": "hannah@gmail.com",
+      "role": "student"
+    },
+    {
+      "id": 10,
+      "name": "Ian Lewis",
+      "rollNumber": "R1009",
+      "department": "IT",
+      "registrationNumber": "REG2009",
+      "classSection": "C",
+      "emailId": "ian@gmail.com",
+      "role": "student"
+    },
+    {
+      "id": 11,
+      "name": "Julia Martin",
+      "rollNumber": "R1010",
+      "department": "CSE",
+      "registrationNumber": "REG2010",
+      "classSection": "A",
+      "emailId": "julia@gmail.com",
+      "role": "student"
+    },
+    {
+      "id": 12,
+      "name": "Dhavanesh",
+      "emailId": "dhavanesh@gmail.com",
+      "role": "student",
+      "rollNumber": "24CS412",
+      "registrationNumber": "312324104072",
+      "department": "CSE",
+      "classSection": "A"
+    },
+    {
+      "id": 13,
+      "name": "Nithish S S",
+      "emailId": "nithish@gmail.com",
+      "role": "student",
+      "rollNumber": "24CS310",
+      "registrationNumber": "312324104195",
+      "department": "CSE",
+      "classSection": "C"
     }
   ],
   "tests": [
@@ -28,7 +110,7 @@
       "duration_minutes": 30,
       "created_by": 1,
       "is_published": true,
-      "created_at": "2023-10-27T10:00:00.000Z",
+      "created_at": "2026-03-31T08:29:08.964Z",
       "questions": [
         {
           "question_number": 1,
@@ -50,7 +132,7 @@
       "duration_minutes": 60,
       "created_by": 1,
       "is_published": true,
-      "created_at": "2023-10-27T10:05:00.000Z",
+      "created_at": "2026-03-31T08:29:08.964Z",
       "problems": [
         {
           "problem_number": 1,
@@ -73,5 +155,15 @@
       ]
     }
   ],
-  "test_results": []
+  "test_results": [
+    {
+      "id": 1,
+      "test_id": 1,
+      "student_id": 12,
+      "score": 5,
+      "total_marks": 30,
+      "status": "completed",
+      "submitted_at": "2026-03-31T08:45:06.817Z"
+    }
+  ]
 }

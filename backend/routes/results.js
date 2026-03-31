@@ -4,16 +4,19 @@ const { readDb, writeDb } = require('../jsonDb');
 
 module.exports = () => {
 
-    // GET /api/results - Get all results with optional test filter
+    // GET /api/results - Get all results with optional filters
     router.get('/', (req, res) => {
         try {
-            const { test_id } = req.query;
+            const { test_id, student_id } = req.query;
             const db = readDb();
             
             let results = db.test_results;
 
             if (test_id) {
                 results = results.filter(tr => String(tr.test_id) === String(test_id));
+            }
+            if (student_id) {
+                results = results.filter(tr => String(tr.student_id) === String(student_id));
             }
             
             // Enrich results
@@ -24,12 +27,12 @@ module.exports = () => {
                 return {
                     ...tr,
                     student_name: student.name || 'Unknown',
-                    student_email: student.email || 'Unknown',
-                    reg_no: student.reg_no || 'Unknown',
+                    student_email: student.emailId || 'Unknown',
+                    reg_no: student.registrationNumber || 'Unknown',
                     test_title: test.title || 'Unknown',
                     test_type: test.test_type || 'Unknown'
                 };
-            }).sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+            }).sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime());
 
             res.json(results);
         } catch (error) {
@@ -72,8 +75,8 @@ module.exports = () => {
                 
                 return {
                     "Student Name": student.name || 'Unknown',
-                    "Email": student.email || 'Unknown',
-                    "Reg No": student.reg_no || 'Unknown',
+                    "Email": student.emailId || 'Unknown',
+                    "Reg No": student.registrationNumber || 'Unknown',
                     "Test Name": test.title || 'Unknown',
                     "Score": tr.score,
                     "Total Marks": tr.total_marks,

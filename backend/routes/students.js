@@ -11,7 +11,7 @@ module.exports = () => {
     // GET /api/students - List all students with optional filters
     router.get('/', (req, res) => {
         try {
-            const { search, department, class_section } = req.query;
+            const { search, department, classSection } = req.query;
             const db = readDb();
             
             let students = db.users.filter(u => u.role === 'student');
@@ -20,19 +20,21 @@ module.exports = () => {
                 const searchLower = search.toLowerCase();
                 students = students.filter(s => 
                     (s.name && s.name.toLowerCase().includes(searchLower)) || 
-                    (s.email && s.email.toLowerCase().includes(searchLower)) || 
-                    (s.roll_no && s.roll_no.toLowerCase().includes(searchLower))
+                    (s.emailId && s.emailId.toLowerCase().includes(searchLower)) || 
+                    (s.rollNumber && s.rollNumber.toLowerCase().includes(searchLower)) ||
+                    (s.registrationNumber && s.registrationNumber.toLowerCase().includes(searchLower))
                 );
             }
             if (department) {
                 students = students.filter(s => s.department === department);
             }
-            if (class_section) {
-                students = students.filter(s => s.class_section === class_section);
+            if (classSection) {
+                students = students.filter(s => s.classSection === classSection);
             }
 
-            // Remove passwords from response
-            students = students.map(({ password, ...rest }) => rest).sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            // Remove passwords from response (in our case rollNumber is password, but we might want to return rollNumber to UI)
+            // It's requested to be returned in Dashboard so we will leave it for students.
+            students = students.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
             
             res.json(students);
         } catch (error) {
@@ -53,7 +55,7 @@ module.exports = () => {
 
     // GET /api/students/template - Download CSV template
     router.get('/template', (req, res) => {
-        const csvContent = 'S.No,Class,Roll No,Reg No,Name,Email\n1,A,24CS360,3123241040,SAMPLE STUDENT,24CS360@gmail.com\n';
+        const csvContent = 'S.No,Class,Roll No,Reg No,Name,Email\n1,A,R1001,REG2001,SAMPLE STUDENT,sample@gmail.com\n';
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', 'attachment; filename=student_template.csv');
         res.send(csvContent);
@@ -62,12 +64,11 @@ module.exports = () => {
     // POST /api/students - Create single student
     router.post('/', (req, res) => {
         try {
-            const { name, email, reg_no, roll_no, department, class_section } = req.body;
-            const password = reg_no;
+            const { name, emailId, registrationNumber, rollNumber, department, classSection } = req.body;
             const db = readDb();
 
-            if (db.users.some(u => u.email === email)) {
-                return res.status(409).json({ message: 'A student with this email already exists' });
+            if (db.users.some(u => u.registrationNumber === registrationNumber)) {
+                return res.status(409).json({ message: 'A student with this registration number already exists' });
             }
 
             const newId = db.users.length > 0 ? Math.max(...db.users.map(u => u.id)) + 1 : 1;
@@ -75,20 +76,18 @@ module.exports = () => {
             const newStudent = {
                 id: newId,
                 name,
-                email,
-                password,
+                emailId,
                 role: 'student',
-                roll_no,
-                reg_no,
+                rollNumber,
+                registrationNumber,
                 department,
-                class_section
+                classSection
             };
 
             db.users.push(newStudent);
             writeDb(db);
 
-            const { password: _, ...studentWithoutPassword } = newStudent;
-            res.status(201).json({ message: 'Student created successfully', student: studentWithoutPassword });
+            res.status(201).json({ message: 'Student created successfully', student: newStudent });
         } catch (error) {
             res.status(500).json({ message: 'Error creating student', error: error.message });
         }
@@ -121,32 +120,31 @@ module.exports = () => {
 
             for (const row of parsed.data) {
                 const name = row['Name'] || row['name'] || '';
-                const email = row['Email'] || row['email'] || '';
-                const rollNo = row['Roll No'] || row['roll_no'] || row['RollNo'] || '';
-                const regNo = row['Reg No'] || row['reg_no'] || row['RegNo'] || '';
-                const classSection = row['Class'] || row['class'] || row['class_section'] || '';
+                const emailId = row['Email'] || row['email'] || '';
+                const rollNumber = row['Roll No'] || row['rollNo'] || row['RollNo'] || '';
+                const registrationNumber = row['Reg No'] || row['regNo'] || row['RegNo'] || '';
+                const classSection = row['Class'] || row['class'] || row['classSection'] || '';
 
-                if (!name || !email) {
+                if (!name || !registrationNumber) {
                     skippedCount++;
                     continue;
                 }
 
-                if (db.users.some(u => u.email === email.trim())) {
+                if (db.users.some(u => u.registrationNumber === registrationNumber.trim())) {
                     skippedCount++;
-                    errors.push({ email, error: "Email already exists" });
+                    errors.push({ registrationNumber, error: "Registration Number already exists" });
                     continue;
                 }
 
                 db.users.push({
                     id: currentId++,
                     name: name.trim(),
-                    email: email.trim(),
-                    password: regNo.trim(),
+                    emailId: emailId.trim(),
                     role: 'student',
-                    roll_no: rollNo.trim(),
-                    reg_no: regNo.trim(),
+                    rollNumber: rollNumber.trim(),
+                    registrationNumber: registrationNumber.trim(),
                     department,
-                    class_section: classSection.trim()
+                    classSection: classSection.trim()
                 });
                 insertedCount++;
             }

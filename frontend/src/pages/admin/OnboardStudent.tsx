@@ -9,8 +9,8 @@ const OnboardStudent = () => {
 
     // Single enrol state
     const [formData, setFormData] = useState({
-        name: '', email: '', reg_no: '', roll_no: '',
-        department: 'CSE', class_section: 'A',
+        name: '', emailId: '', registrationNumber: '', rollNumber: '',
+        department: 'CSE', classSection: 'A',
     });
     const [submitting, setSubmitting] = useState(false);
 
@@ -28,7 +28,7 @@ const OnboardStudent = () => {
 
     const handleSingleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.name || !formData.email || !formData.reg_no) {
+        if (!formData.name || !formData.emailId || !formData.registrationNumber) {
             setAlert({ type: 'error', message: 'Name, Email, and Register Number are required.' });
             return;
         }
@@ -46,7 +46,7 @@ const OnboardStudent = () => {
 
             if (res.ok) {
                 setAlert({ type: 'success', message: data.message });
-                setFormData({ name: '', email: '', reg_no: '', roll_no: '', department: 'CSE', class_section: 'A' });
+                setFormData({ name: '', emailId: '', registrationNumber: '', rollNumber: '', department: 'CSE', classSection: 'A' });
             } else {
                 setAlert({ type: 'error', message: data.message });
             }
@@ -154,17 +154,17 @@ const OnboardStudent = () => {
                             </div>
                             <div className="admin-form-group">
                                 <label className="admin-form-label">College Email</label>
-                                <input className="admin-form-input" name="email" type="email" placeholder="22cs001@college.edu" value={formData.email} onChange={handleFormChange} required />
+                                <input className="admin-form-input" name="emailId" type="email" placeholder="22cs001@college.edu" value={formData.emailId} onChange={handleFormChange} required />
                             </div>
                         </div>
                         <div className="admin-form-row">
                             <div className="admin-form-group">
-                                <label className="admin-form-label">Register Number (Password)</label>
-                                <input className="admin-form-input" name="reg_no" placeholder="e.g. 22CS001" value={formData.reg_no} onChange={handleFormChange} required />
+                                <label className="admin-form-label">Register Number (Username)</label>
+                                <input className="admin-form-input" name="registrationNumber" placeholder="e.g. REG2001" value={formData.registrationNumber} onChange={handleFormChange} required />
                             </div>
                             <div className="admin-form-group">
-                                <label className="admin-form-label">Roll No</label>
-                                <input className="admin-form-input" name="roll_no" placeholder="e.g. 24CS360" value={formData.roll_no} onChange={handleFormChange} />
+                                <label className="admin-form-label">Roll No (Password)</label>
+                                <input className="admin-form-input" name="rollNumber" placeholder="e.g. R1001" value={formData.rollNumber} onChange={handleFormChange} />
                             </div>
                         </div>
                         <div className="admin-form-row">
@@ -176,7 +176,7 @@ const OnboardStudent = () => {
                             </div>
                             <div className="admin-form-group">
                                 <label className="admin-form-label">Class / Section</label>
-                                <select className="admin-form-select" name="class_section" value={formData.class_section} onChange={handleFormChange}>
+                                <select className="admin-form-select" name="classSection" value={formData.classSection} onChange={handleFormChange}>
                                     {SECTIONS.map(s => <option key={s} value={s}>{s}</option>)}
                                 </select>
                             </div>

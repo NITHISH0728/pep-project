@@ -4,7 +4,7 @@ import FormInput from '../components/FormInput';
 import './LoginPage.css';
 
 const LoginPage = () => {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [formData, setFormData] = useState({ username: '', password: '' });
     const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,7 +17,7 @@ const LoginPage = () => {
         console.log('Login attempt with', formData);
         
         // --- DEVELOPMENT BYPASS ---
-        if (formData.email === 'admin' && formData.password === '1234') {
+        if (formData.username === 'admin' && formData.password === '1234') {
             localStorage.setItem('user', JSON.stringify({
                 _id: 1,
                 email: 'admin',
@@ -30,12 +30,12 @@ const LoginPage = () => {
             return;
         }
 
-        if (formData.email === 'user' && formData.password === '1234') {
+        if (formData.username === 'REG2001' && formData.password === 'R1001') {
             localStorage.setItem('user', JSON.stringify({
                 _id: 2,
-                email: 'user',
+                email: 'alice@gmail.com',
                 role: 'student',
-                name: 'User',
+                name: 'Alice Smith',
                 profile_image: '',
                 message: 'Login successful'
             }));
@@ -89,11 +89,11 @@ const LoginPage = () => {
 
                         <form onSubmit={handleSubmit} className="login-form">
                             <FormInput
-                                label="Username / Email Address"
-                                name="email"
+                                label="Username / Reg No"
+                                name="username"
                                 type="text"
-                                placeholder="admin, user, or rollno@gmail.com"
-                                value={formData.email}
+                                placeholder="Registration Number (e.g. REG2001) or admin"
+                                value={formData.username}
                                 onChange={handleChange}
                                 required
                             />
@@ -101,7 +101,7 @@ const LoginPage = () => {
                                 label="Password"
                                 name="password"
                                 type="password"
-                                placeholder="reg no"
+                                placeholder="Roll Number (e.g. R1001) or 1234"
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
