@@ -73,5 +73,33 @@
       ]
     }
   ],
-  "test_results": []
+  "test_results": [
+    {
+      "id": 1,
+      "test_id": 2,
+      "student_id": 2,
+      "score": 0,
+      "total_marks": 60,
+      "status": "completed",
+      "submitted_at": "2026-03-31T08:01:42.587Z"
+    },
+    {
+      "id": 2,
+      "test_id": 2,
+      "student_id": 2,
+      "score": 0,
+      "total_marks": 60,
+      "status": "completed",
+      "submitted_at": "2026-03-31T08:01:43.390Z"
+    },
+    {
+      "id": 3,
+      "test_id": 1,
+      "student_id": 2,
+      "score": 3,
+      "total_marks": 30,
+      "status": "completed",
+      "submitted_at": "2026-03-31T08:07:52.739Z"
+    }
+  ]
 }
